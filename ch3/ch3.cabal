@@ -22,7 +22,7 @@ maintainer:         jinihm@umich.edu
 extra-source-files: CHANGELOG.md
 
 library
-    exposed-modules:  Heap, BinaryHeap, WeightBiasedHeap
+    exposed-modules:  Heap, BinaryHeap, WeightBiasedHeap, BinomialHeap
 
     -- Modules included in this library but not exported.
     -- other-modules:
@@ -46,4 +46,14 @@ executable ch3
         ch3
 
     hs-source-dirs:   app
+    default-language: Haskell2010
+
+test-suite tests
+    ghc-options: -Wall -fno-warn-orphans
+    type: exitcode-stdio-1.0
+    main-is: tests.hs
+    hs-source-dirs:
+        tests
+    build-depends:
+        base >=4.7 && <5, ch3, QuickCheck, hspec
     default-language: Haskell2010
