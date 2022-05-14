@@ -1,6 +1,6 @@
 {-# LANGUAGE FlexibleInstances, MultiParamTypeClasses, InstanceSigs #-}
 
-module BinomialHeap where
+module BinomialHeap (BinomialHeap) where
 
 import Heap
 

@@ -1,11 +1,10 @@
 {-# LANGUAGE FlexibleInstances, MultiParamTypeClasses, InstanceSigs #-}
 
-module WeightBiasedHeap where
+module WeightBiasedHeap (WBHeap) where
 
 import Heap
 
 data WBHeap a = EmptyHeap | Node Int a (WBHeap a) (WBHeap a) deriving (Eq, Show)
-
 
 size :: WBHeap a -> Int
 size EmptyHeap = 0

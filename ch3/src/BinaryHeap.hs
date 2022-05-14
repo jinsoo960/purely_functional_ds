@@ -1,6 +1,6 @@
 {-# LANGUAGE FlexibleInstances, MultiParamTypeClasses, InstanceSigs #-}
 
-module BinaryHeap where
+module BinaryHeap (BinaryHeap) where
 
 import Heap
 
