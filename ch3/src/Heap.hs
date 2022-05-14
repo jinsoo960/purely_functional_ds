@@ -32,3 +32,11 @@ class Heap heap where
       mergeUntilOne [] = hempty 
       mergeUntilOne [h] = h
       mergeUntilOne hs = mergeUntilOne $ mergePairs hs
+
+  toSortedList :: (Ord a) => heap a -> [a]
+  toSortedList h =
+    case findMin h of
+      Just a -> case deleteMin h of
+        Just h' -> a : toSortedList h'
+        Nothing -> [a]
+      Nothing -> []
