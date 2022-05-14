@@ -1,5 +1,8 @@
+{-# LANGUAGE FlexibleInstances, MultiParamTypeClasses, InstanceSigs #-}
+
 module BinomialHeap where
 
+import Heap
 
 -- rank -> elt -> childeren
 data Tree a = Node Int a [Tree a] deriving (Eq, Show)
@@ -12,10 +15,26 @@ link h1@(Node r a1 c1) h2@(Node _ a2 c2)
   | otherwise = Node (r + 1) a2 (h1 : c2)
 
 -- trees kept in increasing order of rank
-newtype Heap a = Heap [Tree a] deriving (Eq, Show)
+newtype BinomialHeap a = BinomialHeap [Tree a] deriving (Eq, Show)
 
 rank :: Tree a -> Int
 rank (Node r _ _) = r
+
+instance Heap BinomialHeap where
+  hempty = BinomialHeap []
+  hsingleton = BinomialHeap [Node 0 a []]
+
+  insert a (BinomialHeap ts) = BinomialHeap $ insertTree (Node 0 a []) ts
+
+  merge (BinomialHeap ts1) (BinomialHeap ts2) = BinomialHeap $ merge' ts1 ts2
+
+  findMin (BinomialHeap ts) = root . fst <$> removeMinTree ts
+
+  deleteMin (BinomialHeap []) = Nothing
+  deleteMin (BinomialHeap ts) = do
+    (Node _ _ cs, ts') <- removeMinTree ts
+    return $ BinomialHeap (merge' (reverse cs) ts')
+
 
 insertTree :: (Ord a) => Tree a -> [Tree a] -> [Tree a]
 insertTree t [] = [t]
@@ -26,12 +45,6 @@ insertTree t ts@(t':ts')
   where 
     r = rank t
     r' = rank t'
-
-insert :: (Ord a) => a -> Heap a -> Heap a
-insert a (Heap ts) = Heap $ insertTree (Node 0 a []) ts
-
-merge :: (Ord a) => Heap a -> Heap a -> Heap a
-merge (Heap ts1) (Heap ts2) = Heap $ merge' ts1 ts2
 
 merge' :: (Ord a) => [Tree a] -> [Tree a] -> [Tree a]
 merge' [] h = h
@@ -56,37 +69,3 @@ removeMinTree (t:ts) =
     Just (t', ts') -> if root t <= root t'
       then Just (t, ts)
       else Just (t', t : ts')
-
-findMin :: (Ord a) => Heap a -> Maybe a
-findMin (Heap ts) = root . fst <$> removeMinTree ts
-  -- do
-  -- (t, _) <- removeMinTree ts
-  -- return $ root t
-  -- case removeMinTree ts of
-  --   Nothing -> Nothing
-  --   Just (t, _) -> Just $ root t
-
-deleteMin :: (Ord a) => Heap a -> Maybe (Heap a)
-deleteMin (Heap []) = Nothing
-deleteMin (Heap ts) = do
-  (Node _ _ cs, ts') <- removeMinTree ts
-  return $ Heap (merge' (reverse cs) ts')
-
-  -- case removeMinTree ts of
-  --   Nothing -> undefined
-  --   Just ((Node _ _ cs), ts') -> Just $ Heap $ merge' (reverse cs) ts'
-
-fromList :: (Ord a) => [a] -> Heap a 
-fromList = mergeUntilOne . map node
-  where
-    node a = Heap [Node 0 a []]
-    mergePairs :: (Ord a) => [Heap a] -> [Heap a]
-    mergePairs [] = []
-    mergePairs [h] = [h]
-    mergePairs (h1:h2:hs) = merge h1 h2 : mergePairs hs 
-
-    -- we call this log n times since mergePairs decreases the length by half each time
-    mergeUntilOne :: (Ord a) => [Heap a] -> Heap a
-    -- mergeUntilOne [] = EmptyHeap
-    mergeUntilOne [h] = h
-    mergeUntilOne hs = mergeUntilOne $ mergePairs hs
