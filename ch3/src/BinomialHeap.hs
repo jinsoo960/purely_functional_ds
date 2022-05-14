@@ -22,7 +22,7 @@ rank (Node r _ _) = r
 
 instance Heap BinomialHeap where
   hempty = BinomialHeap []
-  hsingleton = BinomialHeap [Node 0 a []]
+  hsingleton a = BinomialHeap [Node 0 a []]
 
   insert a (BinomialHeap ts) = BinomialHeap $ insertTree (Node 0 a []) ts
 
