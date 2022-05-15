@@ -69,3 +69,7 @@ removeMinTree (t:ts) =
     Just (t', ts') -> if root t <= root t'
       then Just (t, ts)
       else Just (t', t : ts')
+
+findMin' :: (Ord a) => BinomialHeap a -> Maybe a
+findMin' (BinomialHeap []) = Nothing
+findMin' (BinomialHeap ts) = Just $ minimum (map root ts)
