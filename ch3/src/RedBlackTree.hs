@@ -53,12 +53,12 @@ balance color a x b = Tree color a x b
 -- linear time from sorted list 
 -- since spliting takes linear time, this might not be exactly linear overall
 -- can be fixed by using vector
-fromOrdListHelper :: (Ord a) => [a] -> Tree a
-fromOrdListHelper [] = Empty
-fromOrdListHelper [a] = Tree B Empty a Empty
-fromOrdListHelper [a, b] = Tree B (Tree R Empty a Empty) b Empty
-fromOrdListHelper [a, b, c] = Tree B (Tree R Empty a Empty) b (Tree R Empty c Empty)
-fromOrdListHelper as = if c /= c' then undefined else case c of 
+fromOrdList :: (Ord a) => [a] -> Tree a
+fromOrdList [] = Empty
+fromOrdList [a] = Tree B Empty a Empty
+fromOrdList [a, b] = Tree B (Tree R Empty a Empty) b Empty
+fromOrdList [a, b, c] = Tree B (Tree R Empty a Empty) b (Tree R Empty c Empty)
+fromOrdList as = if c /= c' then undefined else case c of 
   R -> Tree B left a right
   B -> Tree R left a right
   where
@@ -67,5 +67,5 @@ fromOrdListHelper as = if c /= c' then undefined else case c of
     a = head back'
     back = tail back'
     -- check color for sanity but they should be same always
-    left@(Tree c _ _ _) = fromOrdListHelper front
-    right@(Tree c' _ _ _) = fromOrdListHelper back
+    left@(Tree c _ _ _) = fromOrdList front
+    right@(Tree c' _ _ _) = fromOrdList back
