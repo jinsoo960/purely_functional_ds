@@ -6,7 +6,8 @@ import Heap
 import BinaryHeap
 import WeightBiasedHeap
 import BinomialHeap
-import Data.List (sort)
+import qualified RedBlackTree
+import Data.List (sort, nub)
 
 main :: IO ()
 main = hspec $ do
@@ -22,3 +23,6 @@ main = hspec $ do
 
     it "test BinomialHeap" $
       property (\s -> sort s == toSortedList (fromList s :: BinomialHeap' Int))
+
+    it "test BinomialHeap" $
+      property (\s -> nub (sort s) == RedBlackTree.toSortedList (RedBlackTree.fromList s :: RedBlackTree.RedBlackTree Int))

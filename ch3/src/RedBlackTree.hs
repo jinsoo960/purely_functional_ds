@@ -73,6 +73,6 @@ fromOrdList as = if c /= c' then undefined else case c of
 fromList :: (Ord a) => [a] -> RedBlackTree a
 fromList = foldr insert Empty
 
-toOrdList :: (Ord a) => RedBlackTree a -> [a]
-toOrdList Empty = []
-toOrdList (Tree _ l a r) = toOrdList l ++ [a] ++ toOrdList r
+toSortedList :: (Ord a) => RedBlackTree a -> [a]
+toSortedList Empty = []
+toSortedList (Tree _ l a r) = toSortedList l ++ [a] ++ toSortedList r
