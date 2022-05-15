@@ -19,3 +19,6 @@ main = hspec $ do
 
     it "test BinomialHeap" $
       property (\s -> sort s == toSortedList (fromList s :: BinomialHeap Int))
+
+    it "test BinomialHeap" $
+      property (\s -> sort s == toSortedList (fromList s :: BinomialHeap' Int))
