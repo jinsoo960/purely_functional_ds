@@ -39,16 +39,28 @@ insert x t = let (Tree _ l y r) = helper x t in Tree B l y r
   where
     helper x Empty = Tree R Empty x Empty
     helper x t@(Tree c l y r)
-      | x < y = balance c (helper x l) y r
-      | x > y = balance c l y (helper x r)
+      | x < y = balancel c (helper x l) y r
+      | x > y = balancer c l y (helper x r)
       | otherwise = t
 
-balance :: Color -> RedBlackTree a -> a -> RedBlackTree a -> RedBlackTree a
-balance B (Tree R (Tree R a x b) y c) z d = Tree R (Tree B a x b) y (Tree B c z d)
-balance B (Tree R a x (Tree R b y c)) z d = Tree R (Tree B a x b) y (Tree B c z d)
-balance B a x (Tree R b y (Tree R c z d)) = Tree R (Tree B a x b) y (Tree B c z d)
-balance B a x (Tree R (Tree R b y c) z d) = Tree R (Tree B a x b) y (Tree B c z d)
-balance color a x b = Tree color a x b
+-- balance :: Color -> RedBlackTree a -> a -> RedBlackTree a -> RedBlackTree a
+-- balance B (Tree R (Tree R a x b) y c) z d = Tree R (Tree B a x b) y (Tree B c z d)
+-- balance B (Tree R a x (Tree R b y c)) z d = Tree R (Tree B a x b) y (Tree B c z d)
+-- balance B a x (Tree R b y (Tree R c z d)) = Tree R (Tree B a x b) y (Tree B c z d)
+-- balance B a x (Tree R (Tree R b y c) z d) = Tree R (Tree B a x b) y (Tree B c z d)
+-- balance color a x b = Tree color a x b
+
+-- balance can be separated as we already know which subtree would be problematic
+-- when using them
+balancel :: Color -> RedBlackTree a -> a -> RedBlackTree a -> RedBlackTree a
+balancel B (Tree R (Tree R a x b) y c) z d = Tree R (Tree B a x b) y (Tree B c z d)
+balancel B (Tree R a x (Tree R b y c)) z d = Tree R (Tree B a x b) y (Tree B c z d)
+balancel color a x b = Tree color a x b
+
+balancer :: Color -> RedBlackTree a -> a -> RedBlackTree a -> RedBlackTree a
+balancer B a x (Tree R b y (Tree R c z d)) = Tree R (Tree B a x b) y (Tree B c z d)
+balancer B a x (Tree R (Tree R b y c) z d) = Tree R (Tree B a x b) y (Tree B c z d)
+balancer color a x b = Tree color a x b
 
 -- linear time from sorted list 
 -- since spliting takes linear time, this might not be exactly linear overall
@@ -76,3 +88,7 @@ fromList = foldr insert Empty
 toSortedList :: (Ord a) => RedBlackTree a -> [a]
 toSortedList Empty = []
 toSortedList (Tree _ l a r) = toSortedList l ++ [a] ++ toSortedList r
+
+height :: RedBlackTree a -> Int
+height Empty = 0
+height (Tree _ l _ r) = 1 + max (height l) (height r)
