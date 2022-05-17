@@ -3,9 +3,9 @@
 module Queue where
 
 class Queue q a | q -> a where
-  empty :: q
-  isEmpty :: q -> Bool
+  qempty :: q
+  qisEmpty :: q -> Bool
 
-  snoc :: q -> a -> q
-  head :: q -> Maybe a
-  tail :: q -> Maybe q
+  qsnoc :: q -> a -> q
+  qhead :: q -> Maybe a
+  qtail :: q -> Maybe q

@@ -22,7 +22,7 @@ maintainer:         jinihm@umich.edu
 extra-source-files: CHANGELOG.md
 
 library
-    exposed-modules: Queue
+    exposed-modules: Queue, BatchedQueue
 
     -- Modules included in this library but not exported.
     -- other-modules:
